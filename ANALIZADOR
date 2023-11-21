@@ -6,7 +6,7 @@ package AnalizadorLexico;
 
 
 public class AnalizadorLexico {
-     int estado;
+     int editado;
 
  
     String lex;
