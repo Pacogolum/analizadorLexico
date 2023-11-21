@@ -1,0 +1,230 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package AnalizadorLexico;
+
+
+public class AnalizadorLexico {
+     int estado;
+
+ 
+    String lex;
+    int token;
+    
+ 
+
+    public void principal(String line) {
+        
+        ValidarExpresion(line);
+      Imprimir();
+    }
+
+    public int ValidarExpresion(String line) {
+        
+        char[] caracteres = line.toCharArray();
+        
+
+        estado = 1;
+        int fin = 0;
+ 
+        
+        while (fin < caracteres.length) {
+            char caracter = caracteres[fin];
+
+            switch (estado) {
+                case 1:
+                    if(caracter == ','
+                            || caracter==';'
+                            || caracter=='='
+                            || caracter=='+'
+                            || caracter=='-'
+                            || caracter=='/'
+                            || caracter=='*'
+                            || caracter==')'
+                            || caracter=='('){
+                        estado=10;fin++;
+                        token=5;
+            lex="Simple";
+                    
+                    }else if (Character.isLetter(caracter) && Character.isLowerCase(caracter) && line.charAt(line.length()-1)!=caracter) {
+                    estado = 2;
+                    fin++;
+                    
+                     }
+                    
+                    else if(line.charAt(line.length()-1)==caracter){
+                        estado=3;
+                          fin++;
+                    token=1;
+                    lex="Identificador";
+                 
+                    
+                    } else if (caracter >= '0' && caracter <= '1') {
+                        estado = 4;fin++;
+                    
+                       
+                    
+                    }else if(caracter >= '2' && caracter <= '7'){
+                        estado=6;fin++;
+                       
+                        
+                    }else if(caracter >= '8' && caracter <= '9'||caracter >= 'A' && caracter <= 'F'){
+                        estado=8;fin++;
+                        
+                    
+                    
+        
+                }else{ 
+                        System.out.println("Error lexico detectado"+fin);
+                   
+                        }
+                    break;
+                
+                case 2:
+                   
+                    if (Character.isLetter(caracter) && Character.isLowerCase(caracter) && line.charAt(line.length()-1)!=caracter) {
+                    estado = 2;
+                    fin++;
+                    }
+                    
+                    else if(line.charAt(line.length()-1)==caracter){
+                         estado=3;
+                          fin++;
+                    token=1;
+                    lex="Identificador";
+                }
+                        
+            
+                        else{
+                    System.out.println("Error lexico detectado"+fin);
+                }
+                    break;
+              
+
+            case 4:
+                if (caracter >= '0' && caracter <= '1') {
+                    estado = 4;
+                    fin++;
+                  
+                  
+                } else if(caracter== 'B') {
+                    estado = 5;fin++; // return token
+                  token=2;
+              lex="binario";
+  
+                }else if(caracter >= '2' && caracter <= '7'){
+                    estado=6;fin++;
+                  
+                    
+                }else if(caracter >= '8' && caracter <= '9'||caracter >= 'A' && caracter <= 'F'){
+                    estado=8;fin++;
+                    
+                            
+                   
+                
+                }else{ 
+                        System.out.println("Error lexico detectado"+fin);
+                   
+                        }
+                    break;
+              
+
+            case 6:
+                if (caracter >= '0' && caracter <= '7') {
+                    estado = 6;
+                    fin++;
+               
+                } else if (caracter == 'O') {
+                    estado = 7;//returntoken
+                    fin++;
+                    token=3;
+               lex="octal";
+       
+                } else if(caracter >= '8' && caracter <= '9'){
+                    estado = 8;fin++;
+                    
+                }else if(caracter >= 'A' && caracter <= 'F'){
+                    estado=8;fin++;
+                    
+                }
+                else{ 
+                        System.out.println("Error lexico detectado"+fin);
+                   
+                        }
+                    break;
+           
+
+            case 8:
+                if (caracter >= '0' && caracter <= '9') {
+                    estado = 8;
+                    fin++;
+                    
+                } else if (caracter >= 'A' && caracter <= 'F') {
+                    estado = 8;
+                    fin++;
+                   
+                } else if(caracter=='X'){
+                    estado = 9;fin++;
+                    token=4;
+             lex="hexadecimal";//return token
+              
+                }else{ 
+                        System.out.println("Error lexico detectado"+fin);
+                   
+                        }
+                    break;
+            case 3:
+                token=1;
+                lex="identificador";
+                
+                fin++;
+                break;
+
+            case 5:
+              token=2;
+              lex="binario";
+            fin++;
+           break;
+           
+            case 7:
+               token=3;
+               lex="octal";
+               fin ++;
+              
+               break;
+               
+            case 9:
+             token=4;
+             lex="hexadecimal";
+             fin ++;
+             
+              break;
+
+            case 10:
+            token=5;
+            lex="Simple";
+            fin ++;
+           
+             break;
+              
+            case 11:
+              token=6;
+              lex="Reservada";
+              fin ++;
+           
+              break;
+             
+              
+                  } 
+        }
+
+     return token;
+}
+    
+    public void Imprimir() {
+    
+        System.out.println("Su estado es: "+estado +" Nombre token: "+ lex +" Numero Token: "+ token);
+             
+}
+}
